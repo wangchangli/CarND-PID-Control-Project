@@ -1,5 +1,6 @@
 #ifndef PID_H
 #define PID_H
+#include <vector>
 
 class PID {
 public:
@@ -16,6 +17,14 @@ public:
   double Kp;
   double Ki;
   double Kd;
+
+  /*
+  * variables used for twiddle mode
+  */
+  bool twiddle_mode, reduce_flag, reset;
+  double err, best_err;
+  int param_index, n, step;
+  std::vector<double> dp;
 
   /*
   * Constructor
@@ -41,6 +50,8 @@ public:
   * Calculate the total PID error.
   */
   double TotalError();
+
+  void UpdateParam(int param_index, double delta);
 };
 
 #endif /* PID_H */
