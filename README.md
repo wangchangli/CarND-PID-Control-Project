@@ -24,6 +24,8 @@ when it notice it can’t get closer(according to sum of cte over time ) over a 
 makes controller unstable because normal fluctuation will be exaggerated. A lower Ki make it too long
 to respond to these dynamic changes(system bias).
 
+ref https://www.youtube.com/watch?v=4Y7zG48uHRo
+
 ### Describe how the final hyperparameters were chosen
 
 I use twiddle algorithm to find the properly P, I, D coefficients (see the PID.cpp for the code). As you can see from the code, I take 200 time step as a twiddle period. 
