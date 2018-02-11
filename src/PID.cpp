@@ -46,6 +46,7 @@ void PID::UpdateError(double cte) {
 
    	reset = false;
 
+   	// ref https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/1397890f-71c5-4d83-aae7-0a031eedd1f2/concepts/87d07dd3-70f3-46a0-b35c-c8528792d90f
    	if(twiddle_mode){
 
    		if(step == 0 && !reduce_flag){
