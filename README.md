@@ -1,6 +1,34 @@
 # CarND-Controls-PID
 Self-Driving Car Engineer Nanodegree Program
 
+## Reflection
+
+### Describe the effect each of the P, I, D components had in your implementation.
+
+P component:
+
+Steering angle equals a proportional factor of Kp to the cross track error(steer = -Kp * cte). 
+A bigger Kp may make the steer value change  drastically with in few steps. In reality this 
+drastic variation will render as the vehicle swerving left and right too fast losing the steer control. 
+
+D component:
+
+The D component (-Kd * (cte-prev_cte)) is used to avoid overshooting. It will smoothens the steer 
+according to the reduced error.  A bigger Kd makes the vehicle over damped,  it will take a long 
+time to correct for offsets. A lower Kd makes the vehicle under damped, it will still oscillate.
+
+I component:
+
+The I component (-Ki * (cte+pre_cte…) is used to fix system bias.  It will make the vehicle begin to steer
+when it notice it can’t get closer(according to sum of cte over time ) over a long time . A bigger Ki 
+makes controller unstable because normal fluctuation will be exaggerated. A lower Ki make it too long
+to respond to these dynamic changes(system bias).
+
+### Describe how the final hyperparameters were chosen
+
+I use twiddle algorithm to find the properly P, I, D coefficients (see the PID.cpp for the code). As you can see from the code, I take 200 time step as a twiddle period. 
+
+
 ---
 
 ## Dependencies
