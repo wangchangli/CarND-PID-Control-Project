@@ -4,6 +4,8 @@
 #include "PID.h"
 #include <math.h>
 
+using namespace std;
+
 // for convenience
 using json = nlohmann::json;
 
@@ -32,9 +34,11 @@ int main()
 {
   uWS::Hub h;
 
+  cout << "starting..."<< endl;
+
   PID pid;
   // TODO: Initialize the pid variable.
-  pid.Init(0.0, 0.0, 0.0);
+  pid.Init(0.133130279, 0.000268840848, 3.04127604);
 
   PID pid_t;
   pid_t.Init(0.0, 0.0, 0.0);
@@ -64,20 +68,21 @@ int main()
           pid.UpdateError(cte);
           steer_value = pid.TotalError();         
 
-          pid_t.UpdateError(fabs(cte));
-          throttle_value = pid_t.TotalError();
+          //pid_t.UpdateError(fabs(cte));
+          //throttle_value = pid_t.TotalError();
 
           // DEBUG
-          std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+          //std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = throttle_value;
+          //msgJson["throttle"] = throttle_value;
+          msgJson["throttle"] = 0.3;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
 
           if(pid.reset){
-              msg = "42[\"reset\",{}]";
+              //msg = "42[\"reset\",{}]";
           }
 
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);

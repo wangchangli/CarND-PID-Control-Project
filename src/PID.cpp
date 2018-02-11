@@ -20,8 +20,9 @@ void PID::Init(double Kp, double Ki, double Kd) {
     i_error = 0.0;
     d_error = 0.0;
 
+    // ref https://discussions.udacity.com/t/how-to-twiddle-in-pid-controller-project/246971/3
     // used for twiddle
-    twiddle_mode = true;
+    twiddle_mode = false;
     param_index = 0;
     err = 0;
     best_err = std::numeric_limits<double>::max();
@@ -46,22 +47,33 @@ void PID::UpdateError(double cte) {
    	reset = false;
 
    	if(twiddle_mode){
+
+   		if(step == 0 && !reduce_flag){
+   			UpdateParam(param_index, dp[param_index]);
+   		}
+
    		if(step >= n){
    			err += pow(cte, 2);
    		}
 
-   		if(step == 2 * n){
-   			cout << "step: " << step << endl;
-        	cout << "err: " << err << endl;
-        	cout << "best err: " << best_err << endl;
+   		if(step == (2 * n - 1)){
+   			cout << "################################"<< endl;
+	        cout << "step: " << step << endl;
+	        cout << "err: " << err << endl;
+	        cout << "best err: " << best_err << endl;
+
+	        cout << "Before Kp: " << Kp << ", Ki: " << Ki << ", Kd: " << Kd << endl;  
+	        cout << "Before dp:" << dp[0] <<","<<dp[1]<<","<<dp[2] << endl;
 
    			if(reduce_flag){
    				if(err < best_err){
    					best_err = err;
    					dp[param_index] *= 1.1;
+   					cout << "op1"  << endl;
    				}else{
    					UpdateParam(param_index, dp[param_index]);
    					dp[param_index] *= 0.9;
+   					cout << "op2"  << endl;
    				}
    				param_index = (param_index + 1) % 3;
    				reduce_flag = false;
@@ -70,17 +82,21 @@ void PID::UpdateError(double cte) {
 	   				best_err = err;
 	   				dp[param_index] *= 1.1;
 	   				param_index = (param_index + 1) % 3;
+	   				cout << "op3"  << endl;
 	   			}else{
 	   				UpdateParam(param_index, -2 * dp[param_index]);
 	   				reduce_flag = true;
+	   				cout << "op4"  << endl;
 	   			}
    			}
+
+	        cout << "After Kp: " << Kp << ", Ki: " << Ki << ", Kd: " << Kd << endl;  
+	        cout << "After dp:" << dp[0] <<","<<dp[1]<<","<<dp[2] << endl;
 
    			// reset the simulator
    			err = 0;
    			reset = true;
-   			step = 0;
-        	cout << "Kp: " << Kp << ", Ki: " << Ki << ", Kd: " << Kd << endl;         	
+   			step = -1;       	
    		}
 
 
